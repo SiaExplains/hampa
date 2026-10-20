@@ -29,7 +29,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: Load dummy env
-        run: cat .env.ci >> "$GITHUB_ENV"
+        # $GITHUB_ENV takes KEY=VALUE lines only, so drop comments and blanks.
+        run: grep -Ev '^\s*(#|$)' .env.ci >> "$GITHUB_ENV"
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
