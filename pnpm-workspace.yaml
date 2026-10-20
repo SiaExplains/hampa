@@ -1,3 +1,8 @@
+# Single-package repo. `packages` is listed because pnpm 9 (which Vercel may pick from
+# lockfileVersion 9.0) rejects a workspace file without it; pnpm 10+ does not need it.
+
+packages:
+  - "."
 allowBuilds:
   sharp: false
   unrs-resolver: false
