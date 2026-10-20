@@ -9,7 +9,7 @@ updated: 2026-10-20
 
 One phase = one Claude Code session = one PR. Each has a **Done when** that is verified by running, not by reading. Don't start the next phase until the current one is merged. Feature numbers refer to `04-features-phase-1.md`.
 
-Prerequisites (owner, before H0): Supabase project `hampa-prod` in **eu-central-1** (no staging); Vercel project with Function Region **fra1**; `hampaclub.com` DNS to Vercel; Resend account + domain verified; a `hampa.club.info@…` style mailbox for vendor signups; VAPID keypair generated (`npx web-push generate-vapid-keys`).
+Prerequisites (owner, before H0): Supabase project `hampa-prod` (created as `hampa`) in **eu-central-1** (no staging); Vercel project with Function Region **fra1**; `hampaclub.com` DNS to Vercel; Resend account + domain verified; a `hampa.club.info@…` style mailbox for vendor signups; VAPID keypair generated (`npx web-push generate-vapid-keys`).
 
 ## H0 — Scaffold, i18n, theme, deploy
 

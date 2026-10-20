@@ -15,7 +15,7 @@ Deliberately the FocusCrew stack minus everything Hampa doesn't need (no shared 
 |---|---|---|
 | Framework | **Next.js 15+ App Router**, TypeScript strict | PWA + server actions + route handlers in one deploy |
 | UI | **Tailwind CSS + shadcn/ui** (Radix) | unstyled primitives take the brand tokens; RTL support via logical properties |
-| Fonts | **Vazirmatn** (fa) + **Inter** (en/de), self-hosted `next/font/local`, weights 400/500/600/700 | Vazirmatn with `ss01` for Persian digits |
+| Fonts | **Vazirmatn** (fa) + **Inter** (en/de), self-hosted `next/font/local`, weights 400/500/600/700 | Vazirmatn **Farsi-Digits build** (`Vazirmatn-FD-*`) for Persian digits — v33 has no `ss01` (H0, 2026-10-20) |
 | i18n | **next-intl**, `[locale]` URL segment | see `07-i18n.md` |
 | API | **tRPC v11** in `app/api/trpc/[trpc]/route.ts` + React Query | end-to-end types; the mobile app will consume the same router later |
 | Validation | **zod** schemas in `src/lib/validation/` | single source for forms + API |
@@ -62,7 +62,7 @@ hampa/
 │  ├─ lib/ (validation/, dates.ts, utils.ts)
 │  └─ styles/ (globals.css, tokens.css)
 ├─ emails/ (React Email templates)
-├─ drizzle.config.ts · next.config.ts · tailwind.config.ts · vercel.json
+├─ drizzle.config.ts · next.config.ts · vercel.json   (no tailwind.config: Tailwind v4 is configured in src/styles/globals.css)
 └─ .github/workflows/ci.yml
 ```
 
@@ -93,7 +93,7 @@ Rules:
 
 ## Auth flow
 
-- Middleware (`src/middleware.ts`): refreshes Supabase session cookie, resolves locale, redirects unauthenticated users on `(app)` and `(admin)` routes to `/login`, redirects `pending_approval` users to `/waiting`.
+- Proxy (`src/proxy.ts` — Next 16 renamed `middleware.ts` to `proxy.ts`): refreshes Supabase session cookie, resolves locale, redirects unauthenticated users on `(app)` and `(admin)` routes to `/login`, redirects `pending_approval` users to `/waiting`.
 - tRPC context loads `auth.user` → `public.users` row once per request.
 - Step-up auth for destructive admin actions: re-enter password within 5 minutes (Supabase `reauthenticate`).
 
@@ -126,7 +126,7 @@ CRON_SECRET=
 HAMPA_OWNER_EMAIL=
 ```
 
-Production secrets live only in Vercel. **One Supabase project (`hampa-prod`), no staging** — decided 2026-10-20 to keep it simple. Consequences: Vercel preview deployments get the same DB env, so previews run against production data; local dev uses a local Postgres (`docker run postgres:16` or `supabase start`) for schema work, and migrations are applied to prod only from `main` after merge (`pnpm db:migrate` run by Siavash, never from CI or a preview). Test data must be clearly named (`test-…`) and cleaned up. Revisit if a second developer joins.
+Production secrets live only in Vercel. **One Supabase project (named `hampa` in the dashboard; referred to as hampa-prod here), no staging** — decided 2026-10-20 to keep it simple. Consequences: Vercel preview deployments get the same DB env, so previews run against production data; local dev uses a local Postgres (`docker run postgres:16` or `supabase start`) for schema work, and migrations are applied to prod only from `main` after merge (`pnpm db:migrate` run by Siavash, never from CI or a preview). Test data must be clearly named (`test-…`) and cleaned up. Revisit if a second developer joins.
 
 ## Hosting & domains
 

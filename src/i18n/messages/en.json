@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "title": "Hampa",
+    "description": "The Hampa sports community in Berlin. Do sport together."
+  },
+  "home": {
+    "tagline": "Let's stay active together.",
+    "lead": "Hampa is getting a new home. Soon you'll find events, your sports and your people here.",
+    "soon": "Coming soon"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Language",
+    "fa": "فارسی",
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "footer": {
+    "version": "Version {version}"
+  }
+}

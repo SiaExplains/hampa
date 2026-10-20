@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "title": "Hampa",
+    "description": "Die Hampa-Sportcommunity in Berlin. Gemeinsam Sport machen."
+  },
+  "home": {
+    "tagline": "Lass uns zusammen aktiv bleiben.",
+    "lead": "Hampa bekommt ein neues Zuhause. Bald findest du hier Events, deine Sportarten und deine Leute.",
+    "soon": "Bald verfügbar"
+  },
+  "theme": {
+    "label": "Design",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Sprache",
+    "fa": "فارسی",
+    "en": "English",
+    "de": "Deutsch"
+  },
+  "footer": {
+    "version": "Version {version}"
+  }
+}
