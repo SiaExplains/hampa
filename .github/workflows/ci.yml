@@ -2,12 +2,12 @@
 # Vercel builds main itself, so there is no push trigger and no deploy step.
 name: CI
 
+# No `paths-ignore`: `check` is a required status on main, and a workflow skipped by a
+# path filter never reports, which would leave docs-only PRs unmergeable. Instead the job
+# always runs and skips the heavy steps itself when only docs changed.
 on:
   pull_request:
     branches: [main]
-    paths-ignore:
-      - "docs/**"
-      - "**/*.md"
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -21,18 +21,41 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Depth 2 gives the PR merge commit both parents: HEAD^1 is the base, HEAD the result.
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+        with:
+          fetch-depth: 2
+      - name: Classify changes
+        id: changes
+        run: |
+          changed="$(git diff --name-only HEAD^1 HEAD)"
+          printf 'Changed files:\n%s\n' "$changed"
+          if printf '%s\n' "$changed" | grep -Ev '^docs/|\.md$' | grep -q .; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "code=false" >> "$GITHUB_OUTPUT"
+            echo "Docs-only change: skipping install, lint, typecheck, test, i18n and build."
+          fi
+      - if: steps.changes.outputs.code == 'true'
+        uses: pnpm/action-setup@v4
+      - if: steps.changes.outputs.code == 'true'
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - name: Load dummy env
+      - if: steps.changes.outputs.code == 'true'
+        run: pnpm install --frozen-lockfile
+      - if: steps.changes.outputs.code == 'true'
+        name: Load dummy env
         # $GITHUB_ENV takes KEY=VALUE lines only, so drop comments and blanks.
         run: grep -Ev '^\s*(#|$)' .env.ci >> "$GITHUB_ENV"
-      - run: pnpm lint
-      - run: pnpm typecheck
-      - run: pnpm test
-      - run: pnpm check:i18n
-      - run: pnpm build
+      - if: steps.changes.outputs.code == 'true'
+        run: pnpm lint
+      - if: steps.changes.outputs.code == 'true'
+        run: pnpm typecheck
+      - if: steps.changes.outputs.code == 'true'
+        run: pnpm test
+      - if: steps.changes.outputs.code == 'true'
+        run: pnpm check:i18n
+      - if: steps.changes.outputs.code == 'true'
+        run: pnpm build

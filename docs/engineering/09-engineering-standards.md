@@ -57,7 +57,7 @@ jobs:
 - **No `schedule` workflows, ever.** Cron work runs on Vercel (`06-architecture.md`).
 - No deploy workflow — Vercel Git integration deploys previews and production.
 - Dependabot: security updates only.
-- Path filter: skip CI when only `docs/**` or `*.md` changed.
+- Docs-only PRs (`docs/**`, `*.md`) skip the heavy steps **inside** the job, not via `paths-ignore`: `check` is a required status on `main`, and a path-filtered workflow never reports, which would block the merge.
 
 Build with dummy env values in CI (`.env.ci` committed, no secrets) so `next build` passes without touching Supabase.
 
