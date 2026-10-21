@@ -2,6 +2,12 @@
 
 All notable changes to HampaClub.com. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versions follow [semver](https://semver.org/).
 
+## [0.1.1] - 2026-10-21
+
+### Fixed
+
+- Pull requests that only change documentation can be merged again: the required check now always reports, and skips the build steps when only docs changed.
+
 ## [0.1.0] - 2026-10-20
 
 ### Added
